@@ -1,0 +1,50 @@
+[Default]
+# Namespace of the metadata to use as variables for Ansible
+# When the same tenant is used for more than one project,
+# each project should have its own config file and metadata_namespace
+# When user wants to put a host variable
+#   key: value
+# to a VM, he must set the VM's metadata as follows:
+# <metadata_namespace>key=value
+# For instance:
+# metadata_namespace = "myplatform:"
+# VM's Metadata:
+#   myplatform:ansible_user=ubuntu
+# Default is "ansible:" (no quote)
+metadata_namespace = ansible:
+
+# Use creation key
+# If use_creation_key is set to true, and user does not specify
+# <metadata_namespace>ansible_private_key_file on host metadata,
+# then the script will use its cloud key (the key that the VM is
+# created with) as its SSH key for Ansible.
+# If use_creation_key is set to false, and user does not specify
+# <metadata_namespace>ansible_private_key_file, then Ansible will use
+# whatever defined in SSH config.
+# If <metadata_namespace>ansible_private_key_file is found on
+# host metadata, the script will always use it, regardless of use_creation_key
+# Default value is false
+#use_creation_key = false
+
+# Key folder containing all the keys
+# After retrieving key name from  <metadata_namespace>ansible_private_key_file
+# or from the creation key, Ansible will seek the key file in the foler
+# defined by key_folder
+# Default value is "." (current folder)
+#key_folder = .
+
+[Authentication]
+# OpenStack authentication credentials
+# These values will be overriden by environment variables
+# (e.g. source openstack.rc)
+#os_username = my_username
+#os_tenant_name = my_project
+#os_tenant_id = f55ac58135268ce7867511a365ab2568
+#os_auth_url = https://keystone:5000/v2.0
+#os_password = my_secret_password
+
+[Template]
+# Additional inventory information can be added into a JSON file
+# It is useful to put all static information (e.g. group hierarchy,
+# group variables) into a JSON and keep minimal information on OpenStack's VMs
+#template_file = ./openstack_template.json
