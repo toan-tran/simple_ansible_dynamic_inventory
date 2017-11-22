@@ -23,6 +23,7 @@
 from ConfigParser import ConfigParser
 import json
 import os
+import string
 
 from novaclient import client
 
@@ -70,8 +71,9 @@ def get_template(configs):
     
 def get_client(configs):
     authentication = configs.get('Authentication', {})
-    os_version = os.environ.get('OS_VERSION',
-                                authentication.get('os_version',2))
+    os_identity_api_version = os.environ.get('OS_VERSION',
+                                             os.environ.get('OS_IDENTITY_API_VERSION',
+                                             authentication.get('os_version',2)))
     os_auth_url = os.environ.get('OS_AUTH_URL',
                                  authentication.get('os_auth_url'))
     if not os_auth_url:
@@ -84,15 +86,21 @@ def get_client(configs):
                                  authentication.get('os_password'))
     if not os_password:
         raise Exception("ERROR: OS_PASSWORD is not set")
-    os_tenant_id = os.environ.get('OS_TENANT_ID',
-                                  authentication.get('os_tenant_id'))
-    if not os_tenant_id:
-        raise Exception("ERROR: OS_TENANT_ID is not set")
-    nova = client.Client(os_version, os_username, os_password,
-                         os_tenant_id, os_auth_url)
-    nova.client.tenant_id = os_tenant_id
 
-    # Authenticate client.
-    # Raise exception as it is
-    nova.authenticate()
+    os_tenant_id = os.environ.get('OS_TENANT_ID',
+                                  os.environ.get('OS_PROJECT_ID',
+                                  authentication.get('os_tenant_id',
+                                  authentication.get('os_project_id'))))
+    if not os_tenant_id:
+        raise Exception("ERROR: No OS_TENANT_ID or OS_PROJECT_ID is set")
+
+    os_user_domain_name = os.environ.get('OS_USER_DOMAIN_NAME', 'default')
+
+    if os_identity_api_version == '2':
+        nova = client.Client('2.1', os_username, os_password,
+                             os_tenant_id, os_auth_url)
+    else:
+        nova = client.Client('2.1', os_username, os_password,
+                             os_tenant_id, os_auth_url,
+                             user_domain_name=os_user_domain_name)
     return nova

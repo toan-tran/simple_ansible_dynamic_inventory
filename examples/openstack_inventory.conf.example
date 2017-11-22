@@ -36,12 +36,16 @@ metadata_namespace = ansible:
 [Authentication]
 # OpenStack authentication credentials
 # These values will be overriden by environment variables
-# (e.g. source openstack.rc)
+# (e.g. source openstack.rc). Therefore if you only use openstack
+# environment source file, you don't need to set these values.
+# NOTE: os_user_domain_name is required only with OpenStack Identity API v3
+#
 #os_username = my_username
 #os_tenant_name = my_project
 #os_tenant_id = f55ac58135268ce7867511a365ab2568
 #os_auth_url = https://keystone:5000/v2.0
 #os_password = my_secret_password
+#os_user_domain_name = my_domain
 
 [Template]
 # Additional inventory information can be added into a JSON file

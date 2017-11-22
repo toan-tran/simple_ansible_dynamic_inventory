@@ -18,16 +18,16 @@ Script:
       pip install -r requirements.txt
       ````
 
-  - Use the examples in the config folder to create your own configuration file openstack_inventory.conf
-    
-  - The scripts will search in following locations for the configuration file by the following order, first file found will be used.
+  - The script will load configurations by looking for `openstack_inventory.conf` in following locations by the following order, first file found will be used.
 
       - Current folder
       - .ansible/
       - ~/.ansible/
       - /etc/ansible/
 
-    If no configuration file is found, or no explicit value is set for a particular parameter, default values will be used.
+      If no configuration file is found, or no explicit value is set for a particular parameter, default values will be used, except for OpenStack credentials, which you must load as environment variables (e.g. source the OpenStack rc file).
+
+  - You can use `openstack_inventory.conf.example` in the `examples` folder to create your own configuration file.
 
 
 ## Set up OpenStack platform
